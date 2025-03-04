@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\BonoController;
-use App\Http\Controllers\SesionController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PassController;
+use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,32 +33,32 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Rutas para CLIENTES
     Route::middleware('role:client')->group(function () {
-        Route::get('/perfil', [ClienteController::class, 'showProfile']);
-        Route::put('/perfil', [ClienteController::class, 'updateProfile']);
+        Route::get('/perfil', [UserController::class, 'showProfile']);
+        Route::put('/perfil', [UserController::class, 'updateProfile']);
 
-        Route::get('/mis-bonos', [BonoController::class, 'index']);
-        Route::post('/comprar-bono', [BonoController::class, 'store']);
+        Route::get('/mis-bonos', [PassController::class, 'index']);
+        Route::post('/comprar-bono', [PassController::class, 'store']);
 
-        Route::get('/mis-sesiones', [SesionController::class, 'index']);
-        Route::post('/reservar-sesion', [SesionController::class, 'store']);
+        Route::get('/mis-sesiones', [BookingController::class, 'index']);
+        Route::post('/reservar-sesion', [BookingController::class, 'store']);
     });
 
     // Rutas para ADMINISTRADORES
     Route::middleware('role:admin')->group(function () {
-        Route::get('/clientes', [ClienteController::class, 'index']);
-        Route::get('/clientes/{id}', [ClienteController::class, 'show']);
-        Route::post('/clientes', [ClienteController::class, 'store']);
-        Route::put('/clientes/{id}', [ClienteController::class, 'update']);
-        Route::delete('/clientes/{id}', [ClienteController::class, 'destroy']);
+        Route::get('/clientes', [UserController::class, 'index']);
+        Route::get('/clientes/{id}', [UserController::class, 'show']);
+        Route::post('/clientes', [UserController::class, 'store']);
+        Route::put('/clientes/{id}', [UserController::class, 'update']);
+        Route::delete('/clientes/{id}', [UserController::class, 'destroy']);
 
-        Route::get('/bonos', [BonoController::class, 'index']);
-        Route::post('/bonos', [BonoController::class, 'store']);
-        Route::get('/bonos/{id}', [BonoController::class, 'show']);
-        Route::delete('/bonos/{id}', [BonoController::class, 'destroy']);
+        Route::get('/bonos', [PassController::class, 'index']);
+        Route::post('/bonos', [PassController::class, 'store']);
+        Route::get('/bonos/{id}', [PassController::class, 'show']);
+        Route::delete('/bonos/{id}', [PassController::class, 'destroy']);
 
-        Route::get('/sesiones', [SesionController::class, 'index']);
-        Route::post('/sesiones', [SesionController::class, 'store']);
-        Route::get('/sesiones/{id}', [SesionController::class, 'show']);
-        Route::delete('/sesiones/{id}', [SesionController::class, 'destroy']);
+        Route::get('/sesiones', [BookingController::class, 'index']);
+        Route::post('/sesiones', [BookingController::class, 'store']);
+        Route::get('/sesiones/{id}', [BookingController::class, 'show']);
+        Route::delete('/sesiones/{id}', [BookingController::class, 'destroy']);
     });
 });
