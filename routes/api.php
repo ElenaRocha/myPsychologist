@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -25,9 +24,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // Rutas protegidas
 Route::middleware('auth:sanctum')->group(function () {
     
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/user', [AuthController::class, 'user']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -36,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/perfil', [UserController::class, 'showProfile']);
         Route::put('/perfil', [UserController::class, 'updateProfile']);
 
-        Route::get('/mis-bonos', [PassController::class, 'index']);
+        Route::get('/mis-bonos', [PassController::class, 'getUserPasses']);
         Route::post('/comprar-bono', [PassController::class, 'store']);
 
         Route::get('/mis-sesiones', [BookingController::class, 'index']);
@@ -53,7 +50,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/bonos', [PassController::class, 'index']);
         Route::post('/bonos', [PassController::class, 'store']);
-        Route::get('/bonos/{id}', [PassController::class, 'show']);
         Route::delete('/bonos/{id}', [PassController::class, 'destroy']);
 
         Route::get('/sesiones', [BookingController::class, 'index']);

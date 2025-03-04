@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
@@ -11,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
      /**
-     * Registrar un nuevo usuario (cliente).
+     * Registrar un nuevo usuario (cliente por defecto).
      */
     public function register(Request $request)
     {
