@@ -1,6 +1,6 @@
 # MyPsychologist
 
-Este es un proyecto basado en **Laravel 10** y **Vue 3**, diseñado para facilitar el desarrollo de aplicaciones web modernas enfocadas en la gestión de reservas para un psicólogo.
+Este es un proyecto basado en **Laravel 10** y **Vue 3**, diseñado para facilitar el desarrollo de aplicaciones web modernas enfocadas en la gestión de servicios profesionales por horas, como pueden ser sesines de psicología. 
 
 ## 🚀 Tecnologías utilizadas
 - **Laravel 10** → Framework de PHP para el backend.
@@ -13,7 +13,6 @@ Este es un proyecto basado en **Laravel 10** y **Vue 3**, diseñado para facilit
 ## 📌 Funcionalidades principales
 - **Usuarios Clientes**:
   - Registro e inicio de sesión.
-  - Creación de perfil personal.
   - Reserva de bonos de sesiones (5 o 10 sesiones).
   - Reserva de sesiones individuales o usando bonos.
   - Consulta de sesiones anteriores y futuras.
@@ -75,28 +74,6 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-## 🔑 Configuración de Autenticación con Sanctum
-Sanctum se usa para la autenticación de usuarios en la API. Para configurarlo:
-
-1. Publicar la configuración de Sanctum:
-```sh
-php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
-```
-
-2. Ejecutar la migración para la tabla de tokens:
-```sh
-php artisan migrate
-```
-
-3. Agregar el middleware de autenticación en `app/Http/Kernel.php`:
-```php
-'api' => [
-    \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-    'throttle:api',
-    \Illuminate\Routing\Middleware\SubstituteBindings::class,
-],
-```
-
 ## 🎮 Cómo ejecutar el proyecto
 ### 🚀 Ejecutar el backend (Laravel)
 ```sh
@@ -109,49 +86,6 @@ Esto iniciará el servidor de Laravel en `http://127.0.0.1:8000`
 npm run dev
 ```
 Esto iniciará Vite y el frontend estará disponible en `http://127.0.0.1:5173`
-
-## 🔀 API y Rutas
-Este proyecto sigue una arquitectura **API REST** con las siguientes rutas principales:
-
-### **Autenticación**
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| POST | `/api/register` | Registro de usuarios |
-| POST | `/api/login` | Inicio de sesión |
-| POST | `/api/logout` | Cierre de sesión |
-
-### **Clientes (Administradores)**
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| GET | `/api/clients` | Obtener todos los clientes |
-| POST | `/api/clients` | Crear un nuevo cliente |
-| PUT | `/api/clients/{id}` | Actualizar cliente |
-| DELETE | `/api/clients/{id}` | Eliminar cliente |
-
-### **Bonos y Reservas**
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| GET | `/api/passes` | Obtener bonos de sesiones |
-| POST | `/api/bookings` | Crear una reserva de sesión |
-| GET | `/api/bookings/{id}` | Consultar reservas de un cliente |
-
-## 🗂️ Estructura de directorios
-```
-myPsychologist/
-│── app/               # Código backend en Laravel
-│── bootstrap/         # Archivos de arranque de Laravel
-│── config/            # Configuración del framework
-│── database/          # Migraciones y seeders
-│── public/            # Punto de entrada para el frontend
-│── resources/         # Archivos de frontend (Vue)
-│── routes/            # Definición de rutas web y API
-│── storage/           # Archivos generados por la aplicación
-│── tests/             # Pruebas automatizadas
-│── .env.example       # Variables de entorno de ejemplo
-│── package.json       # Dependencias del frontend
-│── composer.json      # Dependencias del backend
-│── README.md          # Documentación del proyecto
-```
 
 ## ⚡ Opcional: Usar XAMPP
 Si prefieres usar **XAMPP**, simplemente:
