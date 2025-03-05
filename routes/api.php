@@ -13,15 +13,13 @@ Route::post('/login', [AuthController::class, 'login']);
 // Rutas protegidas
 Route::middleware('auth:sanctum')->group(function () {
     
-    Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/perfil', [AuthController::class, 'user']);
+    Route::put('/perfil', [UserController::class, 'update']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Rutas para CLIENTES
     Route::middleware('role:client')->group(function () {
-        Route::get('/perfil', [UserController::class, 'showProfile']);
-        Route::put('/perfil', [UserController::class, 'updateProfile']);
-
         Route::get('/mis-bonos', [PassController::class, 'getUserPasses']);
         Route::post('/comprar-bono', [PassController::class, 'store']);
 
