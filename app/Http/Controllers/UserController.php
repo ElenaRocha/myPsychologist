@@ -28,14 +28,6 @@ class UserController extends Controller
     }
 
     /**
-     * Ver el propio perfil (para clientes)
-     */
-    public function showProfile(Request $request)
-    {
-        return response()->json($request->user());
-    }
-
-    /**
      * Crear un nuevo usuario (solo administradores).
      */
     public function store(Request $request)
@@ -88,33 +80,6 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Usuario actualizado correctamente',
-            'user' => $user
-        ]);
-    }
-
-    /**
-     * Actualizar el propio perfil (para clientes)
-     */
-    public function updateProfile(Request $request)
-    {
-        $user = $request->user();
-
-        $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'sometimes|string|min:6|confirmed',
-            'telphone' => 'sometimes|string|max:20',
-        ]);
-
-        $user->update([
-            'name' => $request->name ?? $user->name,
-            'email' => $request->email ?? $user->email,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
-            'telphone' => $request->telphone ?? $user->telphone,
-        ]);
-
-        return response()->json([
-            'message' => 'Perfil actualizado correctamente',
             'user' => $user
         ]);
     }
