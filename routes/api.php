@@ -32,8 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas para ADMINISTRADORES
     Route::middleware('role:admin')->group(function () {
         Route::get('/clientes', [UserController::class, 'index']);
-        Route::get('/clientes/{id}', [UserController::class, 'show']);
         Route::post('/clientes', [UserController::class, 'store']);
+        Route::get('/clientes/{id}', [UserController::class, 'show']);
         Route::put('/clientes/{id}', [UserController::class, 'update']);
         Route::delete('/clientes/{id}', [UserController::class, 'destroy']);
 

@@ -28,6 +28,36 @@ class UserController extends Controller
     }
 
     /**
+ * Crear un nuevo usuario (solo administradores).
+ */
+public function store(Request $request)
+{
+    $this->authorize('create', User::class);
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email',
+        'password' => 'required|string|min:6|confirmed',
+        'telphone' => 'required|string|max:20',
+        'role' => 'required|in:admin,client',
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'telphone' => $request->telphone,
+        'role' => $request->role,
+    ]);
+
+    return response()->json([
+        'message' => 'Usuario creado exitosamente',
+        'user' => $user
+    ], 201);
+}
+
+
+    /**
      * Actualizar un usuario.
      */
     public function update(Request $request, $id)
