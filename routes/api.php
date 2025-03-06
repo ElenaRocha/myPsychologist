@@ -20,10 +20,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Rutas para CLIENTES
     Route::middleware('role:client')->group(function () {
-        Route::get('/mis-bonos', [PassController::class, 'getUserPasses']);
+        Route::get('/mis-bonos', [PassController::class, 'getUserPasses']); // Sigue mostrando los pases con sesiones restantes
         Route::post('/comprar-bono', [PassController::class, 'store']);
-
-        Route::get('/mis-sesiones', [BookingController::class, 'index']);
+    
+        Route::get('/mis-sesiones', [BookingController::class, 'getUserBookings']); // NUEVA ruta para mostrar todas las reservas juntas
         Route::post('/reservar-sesion', [BookingController::class, 'store']);
     });
 
@@ -34,6 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/clientes/{id}', [UserController::class, 'show']);
         Route::put('/clientes/{id}', [UserController::class, 'update']);
         Route::delete('/clientes/{id}', [UserController::class, 'destroy']);
+        Route::get('/clientes/{id}/bonos', [PassController::class, 'getUserPassesAdmin']);
+        Route::get('/clientes/{id}/reservas', [BookingController::class, 'getUserBookingsAdmin']);
 
         Route::get('/bonos', [PassController::class, 'index']);
         Route::post('/bonos', [PassController::class, 'store']);

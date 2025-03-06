@@ -17,20 +17,33 @@ class BookingController extends Controller
         return response()->json(Booking::all());
     }
 
-    // pensar la ruta para ver sesiones ¿Todas las sesiones de un cliente?¿Todas las sesiones de un bono?
-
-     /**
-     * Obtener todas las reservas de un bono específico.
+    /**
+     * Obtener todas las reservas de un usuario.
      */
-    public function getBookingsByPass($pass_id)
+    public function getUserBookingsAdmin($user_id)
     {
-        $appointments = Appointment::where('pass_id', $pass_id)->pluck('booking_id');
+        $this->authorize('viewAny', Booking::class);
 
-        if ($appointments->isEmpty()) {
-            return response()->json(['message' => 'No hay reservas asociadas a este bono'], 404);
+        $bookings = Booking::where('user_id', $user_id)->get();
+
+        if ($bookings->isEmpty()) {
+            return response()->json(['message' => 'Este usuario no tiene reservas'], 404);
         }
 
-        $bookings = Booking::whereIn('id', $appointments)->get();
+        return response()->json($bookings);
+    }
+
+    /**
+     * Que un usuario pueda ver sus reservas
+     */
+    public function getUserBookings(Request $request)
+    {
+        $user = $request->user();
+        $bookings = Booking::where('user_id', $user->id)->get();
+
+        if ($bookings->isEmpty()) {
+            return response()->json(['message' => 'No tienes reservas activas'], 404);
+        }
 
         return response()->json($bookings);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Models\Pass;
 
@@ -19,15 +20,52 @@ class PassController extends Controller
     /**
      * Obtener todos los bonos de un usuario específico.
      */
-    public function getUserPasses($user_id)
+    public function getUserPassesAdmin($user_id)
     {
+        $this->authorize('viewAny', Pass::class);
+
         $passes = Pass::where('user_id', $user_id)->get();
 
         if ($passes->isEmpty()) {
             return response()->json(['message' => 'Este usuario no tiene bonos'], 404);
         }
 
-        return response()->json($passes);
+        return response()->json($passes->map(function ($pass) {
+            $usedSessions = Appointment::where('pass_id', $pass->id)->count();
+            $remainingSessions = max(0, $pass->total_sessions - $usedSessions);
+
+            return [
+                'id' => $pass->id,
+                'total_sessions' => $pass->total_sessions,
+                'remaining_sessions' => $remainingSessions,
+                'purchase_date' => $pass->purchase_date,
+            ];
+        }));
+    }
+
+    /**
+     * Que un usuario pueda ver sus bonos.
+     */
+    public function getUserPasses(Request $request)
+    {
+        $user = $request->user();
+        $passes = Pass::where('user_id', $user->id)->get();
+
+        if ($passes->isEmpty()) {
+            return response()->json(['message' => 'No tienes bonos disponibles'], 404);
+        }
+
+        return response()->json($passes->map(function ($pass) {
+            $usedSessions = Appointment::where('pass_id', $pass->id)->count();
+            $remainingSessions = max(0, $pass->total_sessions - $usedSessions);
+
+            return [
+                'id' => $pass->id,
+                'total_sessions' => $pass->total_sessions,
+                'remaining_sessions' => $remainingSessions,
+                'purchase_date' => $pass->purchase_date,
+            ];
+        }));
     }
 
     /**
