@@ -18,7 +18,7 @@ class PassController extends Controller
     }
 
     /**
-     * Obtener todos los bonos de un usuario específico.
+     * Obtener todos los bonos de un usuario específico (solo administradores).
      */
     public function getUserPassesAdmin($user_id)
     {
@@ -101,6 +101,4 @@ class PassController extends Controller
 
         return response()->json(['message' => 'Bono eliminado correctamente']);
     }
-
-    // en la vista de los bonos, que se vea cuántas sesiones quedan
 }

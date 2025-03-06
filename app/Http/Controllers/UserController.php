@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-     /**
+    /**
      * Listar todos los usuarios (solo administradores).
      */
     public function index()
@@ -25,6 +26,44 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $this->authorize('view', $user);
         return response()->json($user);
+    }
+
+    /**
+     * Mostrar el perfil del usuario autenticado.
+     */
+    public function showProfile(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
+    /**
+     * Actualizar el perfil del usuario autenticado.
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => ['sometimes', 'email', Rule::unique('users')->ignore($user->id)],
+            'password' => 'sometimes|min:6|confirmed'
+        ]);
+
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->has('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'Perfil actualizado correctamente', 'user' => $user]);
     }
 
     /**
@@ -95,6 +134,4 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
-
-    // falta store, showProfile y updateProfile
 }

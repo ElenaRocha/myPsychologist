@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-     /**
+    /**
      * Registrar un nuevo usuario (cliente por defecto).
      */
     public function register(Request $request)

@@ -18,7 +18,7 @@ class BookingController extends Controller
     }
 
     /**
-     * Obtener todas las reservas de un usuario.
+     * Obtener todas las reservas de un usuario  (solo administradores).
      */
     public function getUserBookingsAdmin($user_id)
     {
@@ -68,16 +68,6 @@ class BookingController extends Controller
             'message' => 'Reserva creada exitosamente',
             'booking' => $booking
         ], 201);
-    }
-
-    /**
-     * Mostrar una reserva específica.
-     */
-    public function show($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $this->authorize('view', $booking);
-        return response()->json($booking);
     }
 
     /**
