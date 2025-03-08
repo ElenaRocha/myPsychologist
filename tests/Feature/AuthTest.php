@@ -15,11 +15,12 @@ class AuthTest extends TestCase
         $response = $this->post('/api/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'telephone' => '1234567890',
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
 
-        $response->assertStatus(302);
+        $response->assertStatus(201);
         $this->assertAuthenticated();
     }
 
@@ -35,7 +36,16 @@ class AuthTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(302);
+        $response->assertStatus(200);
+
+        $data = $response->json();
+        $token = $data['token'];
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(route('user.profile')); 
+
+        $response->assertStatus(200);
         $this->assertAuthenticatedAs($user);
     }
 
@@ -64,7 +74,7 @@ class AuthTest extends TestCase
             'password' => 'wrong-password',
         ]);
 
-        $response->assertStatus(302);
+        $response->assertStatus(401);
         $response->assertSessionHasErrors();
         $this->assertGuest();
     }
@@ -76,7 +86,7 @@ class AuthTest extends TestCase
         $this->actingAs($user);
         $response = $this->post('/api/logout');
 
-        $response->assertStatus(302);
+        $response->assertStatus(200);
         $this->assertGuest();
     }
 }

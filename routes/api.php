@@ -15,7 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Perfil del usuario autenticado
     Route::prefix('perfil')->group(function () {
-        Route::get('/', [UserController::class, 'showProfile']);
+        Route::get('/', [UserController::class, 'showProfile'])->name('user.profile');
         Route::put('/', [UserController::class, 'updateProfile']);
     });
 
