@@ -40,11 +40,11 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         Route::prefix('clientes')->group(function () {
-            Route::get('/', [UserController::class, 'show']);
-            Route::put('/', [UserController::class, 'update']);
-            Route::delete('/', [UserController::class, 'destroy']);
-            Route::get('/bonos', [PassController::class, 'getUserPassesAdmin']);
-            Route::get('/sesiones', [BookingController::class, 'getUserBookingsAdmin']);
+            Route::get('/{id}', [UserController::class, 'show']);
+            Route::put('/{id}', [UserController::class, 'update']);
+            Route::delete('/{id}', [UserController::class, 'destroy']);
+            Route::get('/{id}/bonos', [PassController::class, 'getUserPassesAdmin']);
+            Route::get('/{id}/sesiones', [BookingController::class, 'getUserBookingsAdmin']);
         });
 
         Route::prefix('bonos')->group(function () {
