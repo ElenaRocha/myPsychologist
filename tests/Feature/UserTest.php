@@ -20,7 +20,7 @@ class UserTest extends TestCase
             'email' => 'luis@email.com',
             'password' => 'password',
             'password_confirmation' => 'password',
-            'phone' => '123456789',
+            'telephone' => '123456789',
         ]);
 
         $response->assertStatus(201)
@@ -31,7 +31,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'Luis García',
             'email' => 'luis@email.com',
-            'phone' => '123456789',
+            'telephone' => '123456789',
         ]);
     }
 
@@ -81,7 +81,7 @@ class UserTest extends TestCase
         $response = $this->actingAs($user)->putJson('/api/perfil', [
             'name' => 'Nuevo Nombre',
             'email' => 'nuevo@email.com',
-            'phone' => '987654321',
+            'telephone' => '987654321',
         ]);
 
         $response->assertStatus(200)
@@ -93,7 +93,7 @@ class UserTest extends TestCase
             'id' => $user->id,
             'name' => 'Nuevo Nombre',
             'email' => 'nuevo@email.com',
-            'phone' => '987654321',
+            'telephone' => '987654321',
         ]);
     }
 

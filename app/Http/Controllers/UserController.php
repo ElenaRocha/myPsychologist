@@ -77,7 +77,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'telphone' => 'required|string|max:20',
+            'telephone' => 'required|string|max:20',
             'role' => 'required|in:admin,client',
         ]);
 
@@ -85,7 +85,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'telphone' => $request->telphone,
+            'telephone' => $request->telephone,
             'role' => $request->role,
         ]);
 
@@ -107,14 +107,14 @@ class UserController extends Controller
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
             'password' => 'sometimes|string|min:6|confirmed',
-            'telphone' => 'sometimes|string|max:20',
+            'telephone' => 'sometimes|string|max:20',
         ]);
 
         $user->update([
             'name' => $request->name ?? $user->name,
             'email' => $request->email ?? $user->email,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
-            'telphone' => $request->telphone ?? $user->telphone,
+            'telephone' => $request->telephone ?? $user->telephone,
         ]);
 
         return response()->json([

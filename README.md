@@ -93,6 +93,25 @@ Si prefieres usar **XAMPP**, simplemente:
 - Configura la base de datos en `phpMyAdmin` (`http://localhost/phpmyadmin`).
 - Asegúrate de que el puerto de MySQL en el archivo `.env` coincida con el de XAMPP (`3306` por defecto).
 
+## 🗂️ Estructura del Proyecto
+
+- **`app/`** → Contiene los modelos, controladores y lógica del backend.
+- **`resources/`** → Incluye las vistas, componentes de Vue y estilos.
+- **`routes/`** → Define las rutas de la API y las rutas web.
+- **`database/`** → Contiene migraciones, seeders y factories.
+- **`public/`** → Archivos públicos como imágenes, CSS y JS compilados.
+- **`tests/`** → Pruebas unitarias y de características.
+
+## 🧪 Ejecución de Pruebas
+
+Para ejecutar las pruebas unitarias y de características, usa el siguiente comando:
+
+```sh
+php artisan test
+```
+
+Esto ejecutará todas las pruebas definidas en la carpeta tests/.
+
 ## 🤝 Contribuciones
 Si deseas contribuir a este proyecto:
 1. Haz un **fork** del repositorio.
