@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -28,6 +29,8 @@ class AuthController extends Controller
             'telephone' => $request->telephone,
             'role' => 'client',
         ]);
+
+        Auth::login($user);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

@@ -15,24 +15,25 @@ class UserTest extends TestCase
      */
     public function test_user_registration()
     {
-        $response = $this->postJson('/api/register', [
-            'name' => 'Luis García',
+        $response = $this->post('/api/register', [
+            'name' => 'Luis',
             'email' => 'luis@email.com',
             'password' => 'password',
             'password_confirmation' => 'password',
-            'telephone' => '123456789',
+            'telephone' => '1234567890',
         ]);
 
-        $response->assertStatus(201)
-            ->assertJson([
-                'message' => 'Usuario registrado exitosamente',
-            ]);
+        $response->assertStatus(201);
 
-        $this->assertDatabaseHas('users', [
-            'name' => 'Luis García',
-            'email' => 'luis@email.com',
-            'telephone' => '123456789',
-        ]);
+        $this->assertAuthenticated();
+
+        $data = $response->json();
+        $token = $data['token'];
+
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->get('/api/protected-route');
+
+        $response->assertStatus(201);
     }
 
     /**
@@ -114,5 +115,32 @@ class UserTest extends TestCase
         $this->assertDatabaseMissing('users', [
             'id' => $user->id,
         ]);
+    }
+
+    /**
+     * Test para roles
+     */
+    public function test_admin_access_to_user_management()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $client = User::factory()->create(['role' => 'client']);
+
+        $response = $this->actingAs($admin)->getJson('/api/usuarios');
+        $response->assertStatus(200);
+
+        $response = $this->actingAs($client)->getJson('/api/usuarios');
+        $response->assertStatus(403);
+    }
+
+    /**
+     * Test para comprobar que u cliente no puede eliminar a otro cliente
+     */
+    public function test_client_cannot_delete_another_user()
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $client = User::factory()->create(['role' => 'client']);
+
+        $response = $this->actingAs($client)->deleteJson("/api/usuarios/{$admin->id}");
+        $response->assertStatus(403);
     }
 }

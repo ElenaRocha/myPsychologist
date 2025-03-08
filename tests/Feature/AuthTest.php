@@ -12,9 +12,9 @@ class AuthTest extends TestCase
 
     public function test_user_registration()
     {
-        $response = $this->post('/register', [
-            'name' => 'Luis García',
-            'email' => 'luis@email.com',
+        $response = $this->post('/api/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
@@ -30,7 +30,7 @@ class AuthTest extends TestCase
             'password' => bcrypt('password'),
         ]);
 
-        $response = $this->post('/login', [
+        $response = $this->post('/api/login', [
             'email' => 'luis@email.com',
             'password' => 'password',
         ]);
@@ -41,7 +41,7 @@ class AuthTest extends TestCase
 
     public function test_user_registration_with_invalid_data()
     {
-        $response = $this->post('/register', [
+        $response = $this->post('/api/register', [
             'name' => '',
             'email' => 'invalid-email',
             'password' => 'short',
@@ -59,7 +59,7 @@ class AuthTest extends TestCase
             'password' => bcrypt('password'),
         ]);
 
-        $response = $this->post('/login', [
+        $response = $this->post('/api/login', [
             'email' => 'luis@email.com',
             'password' => 'wrong-password',
         ]);
@@ -74,7 +74,7 @@ class AuthTest extends TestCase
         $user = User::factory()->create();
 
         $this->actingAs($user);
-        $response = $this->post('/logout');
+        $response = $this->post('/api/logout');
 
         $response->assertStatus(302);
         $this->assertGuest();
