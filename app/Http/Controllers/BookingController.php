@@ -57,12 +57,26 @@ class BookingController extends Controller
 
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'pass_id' => 'nullable|exists:passes,id',
             'booking_date' => 'required|date',
             'paid' => 'boolean',
         ]);
 
-        $booking = Booking::create($request->all());
+        // Restar sesiones del pass
+        $user = \App\Models\User::findOrFail($request->user_id);
+        $pass = $user->passes()->where('remaining_sessions', '>', 0)->first();
+        $booking = Booking::create([
+            'user_id' => $user->id,
+            'pass_id' => $pass ? $pass->id : null,
+            'booking_date' => $request->booking_date,
+            'paid' => $request->paid ?? false,
+        ]);
+        if ($pass) {
+            $pass->decrement('remaining_sessions');
+            \App\Models\Appointment::create([
+                'pass_id' => $pass->id,
+                'booking_id' => $booking->id,
+            ]);
+        }
 
         return response()->json([
             'message' => 'Reserva creada exitosamente',
